@@ -57,3 +57,5 @@ group :test do
 end
 
 gem "rubocop", "1.71.0", require: false
+
+gem "devise", "~> 4.9"

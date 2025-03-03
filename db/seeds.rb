@@ -68,7 +68,6 @@
 # puts "Orders Created!"
 # Clear existing data (optional, for development)
 
-
 puts "Seeding stocks..."
 Stock.find_or_create_by!([
   { symbol: "RELIANCE", company_name: "Reliance Industries", current_price: 2500.0, price_change: 0.0, quantity: 1000 },
@@ -88,14 +87,14 @@ Stock.find_or_create_by!([
 # )
 # user.update!(password: "password")
 
-# puts "Seeding admins..."
-# admin = Admin.find_or_create_by!(
-#   name: "Super Admin",
-#   email: "admin@example.com",
-#   role: "admin",
-#   confirmed_at: Time.now
-# )
-# admin.update!(password: "adminpassword")
+puts "Seeding admins..."
+admin = Admin.find_or_create_by!(email: "admin@tradingapp.com") do |a|
+  a.name = "Super Admin"
+  a.role = "admin"
+  a.confirmed_at = Time.now
+  a.password = "adminpassword"
+  a.password_confirmation = "adminpassword"
+end
 
 # puts "Seeding users..."
 users_data = [
@@ -138,6 +137,4 @@ UserStock.find_or_create_by!([
   { user: users[2], stock: Stock.find_by(symbol: "INFY"), quantity: 20, purchased_price: 1700.0, current_price: 1700.0 }
 ])
 
-
 puts "Seeding completed!"
-

@@ -1,6 +1,6 @@
 class Admins::TransactionsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_transaction, only: [:show, :destroy]
+  before_action :set_transaction, only: [ :show, :destroy ]
 
   def index
     @transactions = Transaction.all.order(created_at: :desc)

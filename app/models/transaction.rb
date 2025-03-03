@@ -2,7 +2,9 @@ class Transaction < ApplicationRecord
   belongs_to :order
   belongs_to :user
 
-  validates :transaction_type, presence: true, inclusion: { in: ["credit", "debit"] }
+  enum transaction_type: { credit: "credit", debit: "debit" }
+
+  validates :transaction_type, presence: true
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :brokerage, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :taxes, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -19,9 +21,9 @@ class Transaction < ApplicationRecord
     self.brokerage = amount * brokerage_percentage
     self.taxes = amount * tax_percentage
 
-    if transaction_type == "debit"  # Buying stock
+    if debit? # Buying stock
       self.total_amount = amount + brokerage + taxes
-    else  # "credit" (selling stock)
+    else # Selling stock
       self.total_amount = amount - brokerage - taxes
     end
   end

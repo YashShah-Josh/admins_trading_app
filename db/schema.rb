@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_03_165716) do
   create_table "admins", force: :cascade do |t|
     t.string "name", default: "Admin", null: false
     t.string "email", default: "", null: false
@@ -42,13 +42,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "prices", force: :cascade do |t|
+    t.integer "stock_id", null: false
+    t.float "price"
+    t.datetime "recorded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recorded_at"], name: "index_prices_on_recorded_at"
+    t.index ["stock_id"], name: "index_prices_on_stock_id"
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
     t.string "company_name"
     t.float "current_price"
     t.float "price_change"
     t.integer "quantity"
-    t.boolean "is_active"
+    t.boolean "is_active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -60,7 +70,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
     t.float "amount"
     t.float "brokerage"
     t.float "taxes"
-    t.float "total_amount"
     t.datetime "transaction_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -85,7 +94,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
     t.string "email", default: "", null: false
     t.string "phone"
     t.string "encrypted_password", default: "", null: false
-    t.string "password_digest"
     t.float "balance"
     t.text "address"
     t.string "pan"
@@ -107,6 +115,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
 
   add_foreign_key "orders", "stocks"
   add_foreign_key "orders", "users"
+  add_foreign_key "prices", "stocks"
   add_foreign_key "transactions", "orders"
   add_foreign_key "transactions", "users"
   add_foreign_key "user_stocks", "stocks"

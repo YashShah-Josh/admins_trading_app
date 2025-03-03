@@ -8,9 +8,9 @@
   <% @orders.each do |order| %>
     <%= render order %>
     <p>
-      <%= link_to "Show this order", order %>
+      <%= link_to "Show this order", admins_orders_path(order) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New order", new_order_path %>
+<%= link_to "New order", new_admins_order_path %>

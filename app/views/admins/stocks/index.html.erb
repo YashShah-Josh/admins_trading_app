@@ -8,9 +8,9 @@
   <% @stocks.each do |stock| %>
     <%= render stock %>
     <p>
-      <%= link_to "Show this stock", stock %>
+      <%= link_to "Show this stock", admins_stock_path(stock) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New stock", new_stock_path %>
+<%= link_to "New stock", new_admins_stock_path %>

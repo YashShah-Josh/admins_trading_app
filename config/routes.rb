@@ -1,20 +1,24 @@
 Rails.application.routes.draw do
-  resources :orders
-  resources :stocks
   devise_for :users
-  devise_for :admins, skip: [:registrations]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :admins, controllers: { registrations: "admins/registrations" }
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  namespace :admins do
+    get "dashboard", to: "dashboard#index"
+    resources :stocks
+    resources :orders
+  end
+
+  authenticated :admin do
+    root to: "admins/dashboard#index", as: :authenticated_admin_root
+  end
+
+  # Remove these since stocks/orders are admin-only
+  # resources :orders
+  # resources :stocks
+
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 
   root "home#index"
 end

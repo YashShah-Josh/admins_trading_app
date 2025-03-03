@@ -1,0 +1,17 @@
+<h1>Admin Dashboard</h1>
+
+<nav>
+  <ul>
+    <li><%= link_to "Show Stocks", admins_stocks_path %></li>
+    <li><%= link_to "Show Orders", admins_orders_path %></li>
+    <%= button_to "Sign Out", destroy_admin_session_path, method: :delete %>
+  </ul>
+</nav>
+
+<% if params[:controller] == "admins/stocks" %>
+  <h2>Stocks</h2>
+  <%= render template: "admins/stocks/index" %>
+<% elsif params[:controller] == "admins/orders" %>
+  <h2>Orders</h2>
+  <%= render template: "admins/orders/index" %>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_02_191104) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_03_114512) do
   create_table "admins", force: :cascade do |t|
     t.string "name", default: "Admin", null: false
     t.string "email", default: "", null: false
@@ -33,8 +33,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_02_191104) do
   create_table "orders", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "stock_id", null: false
-    t.string "order_type"
-    t.decimal "price"
+    t.float "price"
     t.integer "quantity"
     t.string "status"
     t.datetime "created_at", null: false
@@ -46,12 +45,39 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_02_191104) do
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
     t.string "company_name"
-    t.decimal "current_price"
-    t.decimal "price_change"
+    t.float "current_price"
+    t.float "price_change"
     t.integer "quantity"
     t.boolean "is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "user_id", null: false
+    t.string "transaction_type"
+    t.float "amount"
+    t.float "brokerage"
+    t.float "taxes"
+    t.float "total_amount"
+    t.datetime "transaction_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_transactions_on_order_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
+  create_table "user_stocks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "stock_id", null: false
+    t.integer "quantity"
+    t.float "purchased_price"
+    t.float "current_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stock_id"], name: "index_user_stocks_on_stock_id"
+    t.index ["user_id"], name: "index_user_stocks_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -60,7 +86,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_02_191104) do
     t.string "phone"
     t.string "encrypted_password", default: "", null: false
     t.string "password_digest"
-    t.decimal "balance", precision: 15, scale: 2
+    t.float "balance"
     t.text "address"
     t.string "pan"
     t.datetime "deleted_at"
@@ -81,4 +107,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_02_191104) do
 
   add_foreign_key "orders", "stocks"
   add_foreign_key "orders", "users"
+  add_foreign_key "transactions", "orders"
+  add_foreign_key "transactions", "users"
+  add_foreign_key "user_stocks", "stocks"
+  add_foreign_key "user_stocks", "users"
 end

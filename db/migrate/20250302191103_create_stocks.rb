@@ -3,8 +3,8 @@ class CreateStocks < ActiveRecord::Migration[7.2]
     create_table :stocks do |t|
       t.string :symbol
       t.string :company_name
-      t.decimal :current_price
-      t.decimal :price_change
+      t.float :current_price
+      t.float :price_change
       t.integer :quantity
       t.boolean :is_active
 

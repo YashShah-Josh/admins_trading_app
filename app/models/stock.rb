@@ -1,4 +1,7 @@
 class Stock < ApplicationRecord
+  has_many :user_stocks
+  has_many :users, through: :user_stocks
+
   validates :symbol, presence: true, uniqueness: true, length: { minimum: 1, maximum: 10 }
   validates :company_name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :current_price, numericality: { greater_than_or_equal_to: 0 }

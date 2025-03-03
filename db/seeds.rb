@@ -56,7 +56,7 @@ puts "Users Created!"
 
 # Create Orders (random buy/sell orders)
 10.times do
-  Order.create!(
+  Order.find_or_create_by!(
     user: User.order("RANDOM()").first,
     stock: Stock.order("RANDOM()").first,
     order_type: [ "buy", "sell" ].sample,

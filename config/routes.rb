@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   devise_for :admins, controllers: { registrations: "admins/registrations" }
 
   namespace :admins do
+    resources :user_stocks, only: [:index, :show]
+    resources :transactions, only: [:index, :show, :destroy]
     get "dashboard", to: "dashboard#index"
     resources :stocks
     resources :orders

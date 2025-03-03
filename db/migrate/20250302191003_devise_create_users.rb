@@ -8,7 +8,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.2]
       t.string :phone
       t.string :encrypted_password, default: "", null: false
       t.string :password_digest
-      t.decimal :balance, precision: 15, scale: 2
+      t.float :balance, precision: 15, scale: 2
       t.text :address
       t.string :pan
       t.datetime :deleted_at

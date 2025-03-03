@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable
+  has_many :user_stocks
+  has_many :stocks, through: :user_stocks
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true, length: { minimum: 3, maximum: 50 }

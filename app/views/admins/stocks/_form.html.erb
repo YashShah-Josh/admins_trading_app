@@ -1,47 +1,33 @@
-<%= form_with(model: stock, url: admins_stocks_path) do |form| %>
-  <% if stock.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(stock.errors.count, "error") %> prohibited this stock from being saved:</h2>
-
-      <ul>
-        <% stock.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div>
-    <%= form.label :symbol, style: "display: block" %>
-    <%= form.text_field :symbol %>
+<%= form_with model: @stock, url: request.path, local: true, class: "form" do |f| %>
+  <div class="mb-3">
+    <%= f.label :symbol %>
+    <%= f.text_field :symbol, class: "form-control", required: true %>
   </div>
 
-  <div>
-    <%= form.label :company_name, style: "display: block" %>
-    <%= form.text_field :company_name %>
+  <div class="mb-3">
+    <%= f.label :company_name %>
+    <%= f.text_field :company_name, class: "form-control", required: true %>
   </div>
 
-  <div>
-    <%= form.label :current_price, style: "display: block" %>
-    <%= form.text_field :current_price %>
+  <div class="mb-3">
+    <%= f.label :current_price %>
+    <%= f.number_field :current_price, step: 0.01, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :price_change, style: "display: block" %>
-    <%= form.text_field :price_change %>
+  <div class="mb-3">
+    <%= f.label :price_change %>
+    <%= f.number_field :price_change, step: 0.01, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :quantity, style: "display: block" %>
-    <%= form.number_field :quantity %>
+  <div class="mb-3">
+    <%= f.label :quantity %>
+    <%= f.number_field :quantity, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :is_active, style: "display: block" %>
-    <%= form.check_box :is_active %>
+  <div class="mb-3">
+    <%= f.label :is_active %>
+    <%= f.check_box :is_active %>
   </div>
 
-  <div>
-    <%= form.submit %>
-  </div>
+  <%= f.submit "Save", class: "btn btn-success" %>
 <% end %>

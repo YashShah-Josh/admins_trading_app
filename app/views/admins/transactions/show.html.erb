@@ -1,2 +1,42 @@
-<h1>Admins::Transactions#show</h1>
-<p>Find me in app/views/admins/transactions/show.html.erb</p>
+<h1>Transaction Details</h1>
+
+<table class="table">
+  <tr>
+    <th>ID:</th>
+    <td><%= @transaction.id %></td>
+  </tr>
+  <tr>
+    <th>User:</th>
+    <td><%= @transaction.user_id %></td>
+  </tr>
+  <tr>
+    <th>Order:</th>
+    <td><%= @transaction.order_id %></td>
+  </tr>
+  <tr>
+    <th>Type:</th>
+    <td><%= @transaction.transaction_type %></td>
+  </tr>
+  <tr>
+    <th>Amount:</th>
+    <td>₹<%= @transaction.amount %></td>
+  </tr>
+  <tr>
+    <th>Brokerage:</th>
+    <td>₹<%= @transaction.brokerage %></td>
+  </tr>
+  <tr>
+    <th>Taxes:</th>
+    <td>₹<%= @transaction.taxes %></td>
+  </tr>
+  <tr>
+    <th>Total:</th>
+    <td>₹<%= @transaction.amount + @transaction.brokerage + @transaction.taxes %></td>
+  </tr>
+  <tr>
+    <th>Date:</th>
+    <td><%= @transaction.transaction_date.strftime("%d %b %Y") %></td>
+  </tr>
+</table>
+
+<a href="<%= admins_transactions_path %>" class="btn btn-secondary">Back</a>

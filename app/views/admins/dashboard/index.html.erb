@@ -1,17 +1,89 @@
-<h1>Admin Dashboard</h1>
+<h1 class="mb-4">Admin Dashboard</h1>
 
-<nav>
-  <ul>
-    <li><%= link_to "Show Stocks", admins_stocks_path %></li>
-    <li><%= link_to "Show Orders", admins_orders_path %></li>
-    <%= button_to "Sign Out", destroy_admin_session_path, method: :delete %>
-  </ul>
-</nav>
+<div class="row">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white shadow">
+      <div class="card-body">
+        <h5>Total Users</h5>
+        <p class="display-6"><%= @total_users %></p>
+      </div>
+    </div>
+  </div>
 
-<% if params[:controller] == "admins/stocks" %>
-  <h2>Stocks</h2>
-  <%= render template: "admins/stocks/index" %>
-<% elsif params[:controller] == "admins/orders" %>
-  <h2>Orders</h2>
-  <%= render template: "admins/orders/index" %>
-<% end %>
+  <div class="col-md-3">
+    <div class="card bg-success text-white shadow">
+      <div class="card-body">
+        <h5>Total Orders</h5>
+        <p class="display-6"><%= @total_orders %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card bg-warning text-white shadow">
+      <div class="card-body">
+        <h5>Total Transactions</h5>
+        <p class="display-6"><%= @total_transactions %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card bg-danger text-white shadow">
+      <div class="card-body">
+        <h5>Total Stocks</h5>
+        <p class="display-6"><%= @total_stocks %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mt-5">Recent Orders</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Stock</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @latest_orders.each do |order| %>
+      <tr>
+        <td><%= order.id %></td>
+        <td><%= order.stock_id %></td>
+        <td><%= order.price %></td>
+        <td><%= order.quantity %></td>
+        <td><%= order.status %></td>
+        <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3 class="mt-5">Recent Transactions</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Order ID</th>
+      <th>Amount</th>
+      <th>Transaction Type</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @latest_transactions.each do |txn| %>
+      <tr>
+        <td><%= txn.id %></td>
+        <td><%= txn.order_id %></td>
+        <td><%= txn.amount %></td>
+        <td><%= txn.transaction_type %></td>
+        <td><%= txn.transaction_date.strftime("%d-%m-%Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

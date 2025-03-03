@@ -1,16 +1,32 @@
-<p style="color: green"><%= notice %></p>
+<h1>Stock Management</h1>
+<a href="<%= new_admins_stock_path %>" class="btn btn-primary mb-3">Add New Stock</a>
 
-<% content_for :title, "Stocks" %>
-
-<h1>Stocks</h1>
-
-<div id="stocks">
-  <% @stocks.each do |stock| %>
-    <%= render stock %>
-    <p>
-      <%= link_to "Show this stock", admins_stock_path(stock) %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New stock", new_admins_stock_path %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Company</th>
+      <th>Price</th>
+      <th>Change</th>
+      <th>Quantity</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stocks.each do |stock| %>
+      <tr>
+        <td><%= stock.symbol %></td>
+        <td><%= stock.company_name %></td>
+        <td><%= stock.current_price %></td>
+        <td><%= stock.price_change %></td>
+        <td><%= stock.quantity %></td>
+        <td><%= stock.is_active ? "Yes" : "No" %></td>
+        <td>
+          <a href="<%= edit_admins_stock_path(stock) %>" class="btn btn-sm btn-warning">Edit</a>
+          <%= link_to "Delete", admins_stock_path(stock), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

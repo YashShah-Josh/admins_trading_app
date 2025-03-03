@@ -1,16 +1,31 @@
-<p style="color: green"><%= notice %></p>
+<h1>Order Management</h1>
 
-<% content_for :title, "Orders" %>
-
-<h1>Orders</h1>
-
-<div id="orders">
-  <% @orders.each do |order| %>
-    <%= render order %>
-    <p>
-      <%= link_to "Show this order", admins_orders_path(order) %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New order", new_admins_order_path %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Stock</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.id %></td>
+        <td><%= order.user_id %></td>
+        <td><%= order.stock_id %></td>
+        <td><%= order.price %></td>
+        <td><%= order.quantity %></td>
+        <td><%= order.status %></td>
+        <td>
+          <a href="<%= edit_admins_order_path(order) %>" class="btn btn-sm btn-warning">Edit</a>
+          <%= link_to "Delete", admins_order_path(order), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -7,7 +7,7 @@ class CreateTransactions < ActiveRecord::Migration[7.2]
       t.float :amount
       t.float :brokerage
       t.float :taxes
-
+      t.float :total_amount
       t.datetime :transaction_date
 
       t.timestamps

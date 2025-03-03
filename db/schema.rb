@@ -70,6 +70,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_165716) do
     t.float "amount"
     t.float "brokerage"
     t.float "taxes"
+    t.float "total_amount"
     t.datetime "transaction_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

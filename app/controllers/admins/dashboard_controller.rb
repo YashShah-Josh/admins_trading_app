@@ -16,9 +16,6 @@ module Admins
       @total_revenue = Transaction.sum(:amount)
       @total_brokerage = Transaction.sum(:brokerage)
       @total_taxes = Transaction.sum(:taxes)
-
-      # # Monthly Transaction Trends
-      # @monthly_transactions = Transaction.group_by_month(:transaction_date, format: "%b %Y").sum(:amount)
     end
   end
 end

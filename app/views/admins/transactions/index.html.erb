@@ -5,7 +5,7 @@
     <tr>
       <th>ID</th>
       <th>User</th>
-      <th>Order</th>
+      <th>Stock</th>
       <th>Type</th>
       <th>Amount</th>
       <th>Brokerage</th>
@@ -19,8 +19,8 @@
     <% @transactions.each do |transaction| %>
       <tr>
         <td><%= transaction.id %></td>
-        <td><%= transaction.user_id %></td>
-        <td><%= transaction.order_id %></td>
+        <td><%= transaction.user.name %></td>
+        <td><%= transaction.order.stock.company_name %></td>
         <td><%= transaction.transaction_type %></td>
         <td>₹<%= transaction.amount %></td>
         <td>₹<%= transaction.brokerage %></td>

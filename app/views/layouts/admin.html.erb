@@ -16,8 +16,11 @@
         <li class="nav-item"><a class="nav-link" href="<%= admins_stocks_path %>">Stocks</a></li>
         <li class="nav-item"><a class="nav-link" href="<%= admins_orders_path %>">Orders</a></li>
         <li class="nav-item"><a class="nav-link" href="<%= admins_transactions_path %>">Transactions</a></li>
-        <li class="nav-item"><a class="nav-link" href="<%= destroy_admin_session_path %>" data-method="delete">Logout</a></li>
+        <li class="nav-item">
+        <%= button_to "Logout", destroy_admin_session_path, method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+      </li>
       </ul>
+
     </div>
   </nav>
 

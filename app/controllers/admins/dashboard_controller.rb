@@ -12,6 +12,13 @@ module Admins
       @total_volume = UserStock.sum(:quantity)
       @latest_orders = Order.order(created_at: :desc).limit(5)
       @latest_transactions = Transaction.order(created_at: :desc).limit(5)
+
+      @total_revenue = Transaction.sum(:amount)
+      @total_brokerage = Transaction.sum(:brokerage)
+      @total_taxes = Transaction.sum(:taxes)
+
+      # # Monthly Transaction Trends
+      # @monthly_transactions = Transaction.group_by_month(:transaction_date, format: "%b %Y").sum(:amount)
     end
   end
 end

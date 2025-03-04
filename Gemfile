@@ -61,3 +61,6 @@ gem "rubocop", "1.71.0", require: false
 gem "devise", "~> 4.9"
 
 gem "jsbundling-rails", "~> 1.3"
+
+gem "chartkick"
+gem "groupdate"

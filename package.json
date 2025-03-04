@@ -12,6 +12,7 @@
     "@hotwired/turbo-rails": "^8.0.13",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.8",
     "jquery": "^3.7.1"
   }
 }

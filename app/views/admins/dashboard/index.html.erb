@@ -38,6 +38,37 @@
   </div>
 </div>
 
+<!-- Revenue, Brokerage, and Taxes -->
+<div class="row mt-4">
+  <div class="col-md-4">
+    <div class="card bg-success text-white shadow">
+      <div class="card-body">
+        <h5 class="card-title">Total Revenue</h5>
+        <p class="display-6">₹<%= @total_revenue %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-info text-white shadow">
+      <div class="card-body">
+        <h5 class="card-title">Total Brokerage</h5>
+        <p class="display-6">₹<%= @total_brokerage %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card bg-danger text-white shadow">
+      <div class="card-body">
+        <h5 class="card-title">Total Taxes</h5>
+        <p class="display-6">₹<%= @total_taxes %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Orders -->
 <h3 class="mt-5">Recent Orders</h3>
 <table class="table table-striped">
   <thead>
@@ -64,6 +95,7 @@
   </tbody>
 </table>
 
+<!-- Recent Transactions -->
 <h3 class="mt-5">Recent Transactions</h3>
 <table class="table table-striped">
   <thead>
@@ -87,3 +119,8 @@
     <% end %>
   </tbody>
 </table>
+
+# <!-- Transaction Trends -->
+# <h2 class="mt-5">Transaction Trends</h2>
+# <%= line_chart @monthly_transactions, height: "300px", library: { title: { text: "Monthly Revenue Trends", fontSize: 18 } } %>
+# <%= column_chart @monthly_transactions, height: "300px" %>

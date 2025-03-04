@@ -64,3 +64,9 @@ gem "jsbundling-rails", "~> 1.3"
 
 gem "chartkick"
 gem "groupdate"
+
+gem "rack-cors", "~> 2.0"
+
+gem "devise-jwt", "~> 0.12.1"
+
+gem "jwt"

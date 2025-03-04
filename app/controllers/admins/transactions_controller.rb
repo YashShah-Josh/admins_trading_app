@@ -9,10 +9,7 @@ module Admins
 
     def show; end
 
-    def destroy
-      @transaction.destroy
-      redirect_to admins_transactions_path, notice: "Transaction deleted successfully."
-    end
+
 
     private
 

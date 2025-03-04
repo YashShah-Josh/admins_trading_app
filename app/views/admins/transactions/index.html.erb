@@ -29,7 +29,6 @@
         <td><%= transaction.transaction_date.strftime("%d %b %Y") %></td>
         <td>
           <a href="<%= admins_transaction_path(transaction) %>" class="btn btn-sm btn-primary">View</a>
-          <%= link_to "Delete", admins_transaction_path(transaction), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
         </td>
       </tr>
     <% end %>

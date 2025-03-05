@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Devise for Admins only
-  devise_for :admins, controllers: { registrations: "admins/registrations" }, skip: [:registrations]
+  devise_for :admins, controllers: { registrations: "admins/registrations" }
 
   namespace :admins do
     resources :user_stocks, only: [:index, :show]

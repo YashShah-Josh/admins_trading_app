@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Devise for Admins only
-  devise_for :admins, controllers: { registrations: "admins/registrations" }
+  devise_for :admins, controllers: { registrations: "admins/registrations" }, skip: [:registrations]
 
   namespace :admins do
     resources :user_stocks, only: [:index, :show]
@@ -14,8 +14,16 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "users/register", to: "users#register"
       post "users/login", to: "users#login"
-      delete "users/logout", to: "users#logout" # Optional if handling logout
+      delete "users/logout", to: "users#logout"
+  
       resources :stocks, only: [:index]
+  
+      resources :orders, only: [] do
+        collection do
+          post :buy
+          post :sell
+        end
+      end
     end
   end
 

@@ -9,7 +9,10 @@ Rails.application.routes.draw do
     resources :stocks
     resources :orders
   end
-
+  devise_for :users, path: 'auth', controllers: {
+    registrations: 'api/v1/users'
+  }
+  
   namespace :api do
     namespace :v1 do
       post "users/register", to: "users#register"

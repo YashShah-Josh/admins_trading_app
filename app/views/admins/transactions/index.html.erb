@@ -12,6 +12,7 @@
       <th>Taxes</th>
       <th>Total</th>
       <th>Date</th>
+      <th>Balance</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -27,6 +28,7 @@
         <td>₹<%= transaction.taxes %></td>
         <td>₹<%= (transaction.amount + transaction.brokerage + transaction.taxes) %></td>
         <td><%= transaction.transaction_date.strftime("%d %b %Y") %></td>
+        <td><%= "%.2f" % transaction.user.balance %></td>
         <td>
           <a href="<%= admins_transaction_path(transaction) %>" class="btn btn-sm btn-primary">View</a>
         </td>

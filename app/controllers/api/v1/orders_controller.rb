@@ -1,134 +1,149 @@
 class Api::V1::OrdersController < ApplicationController
-    before_action :authenticate_user!
+  before_action :authenticate_request!  
+
+  # Buy Stocks
+  def buy
+    user = current_user
+    stock = Stock.find_by(id: params[:stock_id])
+    quantity = params[:quantity].to_i
+    stock_price = stock&.current_price
   
-    # Buy Stocks
-    def buy
-      user = current_user
-      stock = Stock.find_by(id: params[:stock_id])
-      quantity = params[:quantity].to_i
-      stock_price = stock.current_price
+    Rails.logger.info "Stock: #{stock.inspect}" # Log stock details
+    Rails.logger.info "User: #{user.inspect}"   # Log user details
   
-      # Total amount calculation
-      total_amount = stock_price * quantity
-      brokerage = total_amount * 0.02  # 2% Brokerage
-      taxes = total_amount * 0.18      # 18% Taxes
-      final_amount = total_amount + brokerage + taxes
+    return render json: { error: "Stock not found" }, status: :unprocessable_entity if stock.nil?
   
-      # Check if the user has enough balance
-      if user.balance < final_amount
-        return render json: { error: "Insufficient balance" }, status: :unprocessable_entity
-      end
+    total_amount = stock_price * quantity
+    brokerage = total_amount * 0.02  # 2% Brokerage
+    taxes = total_amount * 0.18      # 18% Taxes
+    final_amount = total_amount + brokerage + taxes
   
-      # Check if enough stock is available
-      if stock.quantity < quantity
-        return render json: { error: "Not enough stock available" }, status: :unprocessable_entity
-      end
-  
-      ActiveRecord::Base.transaction do
-        # Deduct balance from user
-        user.update!(balance: user.balance - final_amount)
-  
-        # Create Order
-        order = Order.create!(
-          user_id: user.id,
-          stock_id: stock.id,
-          price: stock_price,
-          quantity: quantity,
-          status: "completed"
-        )
-  
-        # Update user_stocks (add stock to user or update avg price)
-        user_stock = UserStock.find_or_initialize_by(user_id: user.id, stock_id: stock.id)
-        old_quantity = user_stock.quantity || 0
-        old_purchased_price = user_stock.purchased_price || 0
-  
-        total_quantity = old_quantity + quantity
-        new_avg_price = ((old_quantity * old_purchased_price) + (quantity * stock_price)) / total_quantity
-  
-        user_stock.update!(
-          quantity: total_quantity,
-          purchased_price: new_avg_price,
-          current_price: stock_price
-        )
-  
-        # Reduce available stock quantity
-        stock.update!(quantity: stock.quantity - quantity)
-  
-        # Create Transaction
-        Transaction.create!(
-          order_id: order.id,
-          user_id: user.id,
-          transaction_type: "buy",
-          amount: total_amount,
-          brokerage: brokerage,
-          taxes: taxes,
-          total_amount: final_amount,
-          transaction_date: Time.current
-        )
-      end
-  
-      render json: { message: "Stock purchased successfully" }, status: :ok
+    if user.balance < final_amount
+      Rails.logger.error "Insufficient balance: User Balance: #{user.balance}, Required: #{final_amount}"
+      return render json: { error: "Insufficient balance" }, status: :unprocessable_entity
     end
   
-    # Sell Stocks
-    def sell
-      user = current_user
-      stock = Stock.find_by(id: params[:stock_id])
-      quantity = params[:quantity].to_i
-      stock_price = stock.current_price
-  
-      # Find user's stock holdings
-      user_stock = UserStock.find_by(user_id: user.id, stock_id: stock.id)
-  
-      # Ensure user has enough stock
-      if user_stock.nil? || user_stock.quantity < quantity
-        return render json: { error: "Not enough stock to sell" }, status: :unprocessable_entity
-      end
-  
-      # Total amount calculation
-      total_amount = stock_price * quantity
-      brokerage = total_amount * 0.02  # 2% Brokerage
-      taxes = total_amount * 0.18      # 18% Taxes
-      final_amount = total_amount - brokerage - taxes
-  
-      ActiveRecord::Base.transaction do
-        # Deduct stock from user
-        new_quantity = user_stock.quantity - quantity
-        if new_quantity == 0
-          user_stock.destroy!
-        else
-          user_stock.update!(quantity: new_quantity)
-        end
-  
-        # Create Order
-        order = Order.create!(
-          user_id: user.id,
-          stock_id: stock.id,
-          price: stock_price,
-          quantity: quantity,
-          status: "completed"
-        )
-  
-        # Increase stock quantity
-        stock.update!(quantity: stock.quantity + quantity)
-  
-        # Add balance to user
-        user.update!(balance: user.balance + final_amount)
-  
-        # Create Transaction
-        Transaction.create!(
-          order_id: order.id,
-          user_id: user.id,
-          transaction_type: "sell",
-          amount: total_amount,
-          brokerage: brokerage,
-          taxes: taxes,
-          total_amount: final_amount,
-          transaction_date: Time.current
-        )
-      end
-  
-      render json: { message: "Stock sold successfully" }, status: :ok
+    if stock.quantity < quantity
+      Rails.logger.error "Not enough stock: Available: #{stock.quantity}, Requested: #{quantity}"
+      return render json: { error: "Not enough stock available" }, status: :unprocessable_entity
     end
+  
+    order = nil # Initialize order before transaction block
+  
+    ActiveRecord::Base.transaction do
+      user.update!(balance: user.balance - final_amount)
+      
+      order = Order.create!(
+        user_id: user.id,
+        stock_id: stock.id,
+        price: stock_price,
+        quantity: quantity,
+        status: "completed"
+      )
+  
+      Rails.logger.info "Order created: #{order.inspect}"
+  
+      user_stock = UserStock.find_or_initialize_by(user_id: user.id, stock_id: stock.id)
+      old_quantity = user_stock.quantity || 0
+      old_purchased_price = user_stock.purchased_price || 0
+  
+      total_quantity = old_quantity + quantity
+      new_avg_price = ((old_quantity * old_purchased_price) + (quantity * stock_price)) / total_quantity
+  
+      user_stock.update!(
+        quantity: total_quantity,
+        purchased_price: new_avg_price,
+        current_price: stock_price
+      )
+  
+      Rails.logger.info "UserStock updated: #{user_stock.inspect}"
+  
+      stock.update!(quantity: stock.quantity - quantity)
+  
+      Transaction.create!(
+        order_id: order.id,
+        user_id: user.id,
+        transaction_type: "buy",
+        amount: total_amount,
+        brokerage: brokerage,
+        taxes: taxes,
+        total_amount: final_amount,
+        transaction_date: Time.current
+      )
+    end
+    render json: { message: "Stock purchased successfully", order: order }, status: :ok
+  end  
+
+  # Sell Stocks
+  def sell
+    user = current_user
+    stock = Stock.find_by(id: params[:stock_id])
+    quantity = params[:quantity].to_i
+  
+    return render json: { error: "Stock not found" }, status: :not_found unless stock
+    return render json: { error: "Invalid quantity" }, status: :unprocessable_entity if quantity <= 0
+  
+    user_stock = UserStock.find_by(user_id: user.id, stock_id: stock.id)
+    return render json: { error: "You don't own this stock" }, status: :unprocessable_entity if user_stock.nil? || user_stock.quantity < quantity
+  
+    stock_price = stock.current_price
+    total_amount = stock_price * quantity
+    brokerage = total_amount * 0.02  # 2% Brokerage
+    taxes = total_amount * 0.18      # 18% Taxes
+    final_amount = total_amount - brokerage - taxes
+  
+    order = nil # Initialize order before transaction block
+  
+    ActiveRecord::Base.transaction do
+      new_quantity = user_stock.quantity - quantity
+      if new_quantity.zero?
+        user_stock.update!(quantity: 0) # Keep record instead of deleting
+      else
+        user_stock.update!(quantity: new_quantity)
+      end
+  
+      order = Order.create!(
+        user_id: user.id,
+        stock_id: stock.id,
+        price: stock_price,
+        quantity: quantity,
+        status: "completed",
+      )
+  
+      user.update!(balance: user.balance + final_amount)
+  
+      Transaction.create!(
+        order_id: order.id,
+        user_id: user.id,
+        transaction_type: "sell",
+        amount: total_amount,
+        brokerage: brokerage,
+        taxes: taxes,
+        total_amount: final_amount,
+        transaction_date: Time.current
+      )
+    end
+  
+    render json: { message: "Stock sold successfully", order: order }, status: :ok
   end
   
+  private
+
+  def authenticate_request!
+    header = request.headers["Authorization"]
+    token = header.split(" ").last if header.present?
+
+    return render json: { error: "Token is missing" }, status: :unauthorized if token.blank?
+
+    begin
+      decoded_token = JWT.decode(token, Rails.application.credentials.jwt_secret, true, { algorithm: "HS256" }).first
+      @current_user = User.find(decoded_token["user_id"])
+    rescue JWT::ExpiredSignature
+      render json: { error: "Token has expired" }, status: :unauthorized
+    rescue JWT::DecodeError
+      render json: { error: "Invalid token" }, status: :unauthorized
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: "User not found" }, status: :unauthorized
+    end
+  end
+end

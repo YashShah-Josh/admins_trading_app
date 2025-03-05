@@ -29,13 +29,13 @@ class Api::V1::UsersController < ActionController::API
 
   # Strong parameters
   def user_params
-    params.require(:user).permit(:name, :email, :password, :phone, :address, :pan, :password_confirmation).merge(balance: 0)
+    params.require(:user).permit(:name, :email, :password, :phone, :address, :pan, :password_confirmation).merge(balance: 10000)
   end
 
   # Generate JWT token
   def generate_jwt(user)
     payload = { user_id: user.id, exp: 24.hours.from_now.to_i } # Token expires in 24 hours
-    JWT.encode(payload, Rails.application.credentials.jwt_secret, 'HS256')
+    JWT.encode(payload, Rails.application.credentials[:jwt_secret], 'HS256')
   end
 
   # User response data

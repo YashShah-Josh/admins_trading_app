@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_03_165716) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_06_102746) do
   create_table "admins", force: :cascade do |t|
     t.string "name", default: "Admin", null: false
     t.string "email", default: "", null: false
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_03_165716) do
     t.datetime "transaction_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "balance_at_transaction"
     t.index ["order_id"], name: "index_transactions_on_order_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end

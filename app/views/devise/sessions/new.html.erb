@@ -1,38 +1,222 @@
-<h2 class="text-center mb-5">Admin Login</h2>
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="card shadow-lg rounded-lg">
-        <div class="card-body">
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form-horizontal" }) do |f| %>
-            <div class="mb-4">
-              <%= f.label :email, class: "form-label" %>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
-            </div>
-
-            <div class="mb-4">
-              <%= f.label :password, class: "form-label" %>
-              <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
-            </div>
-
-            <% if devise_mapping.rememberable? %>
-              <div class="mb-3 form-check">
-                <%= f.check_box :remember_me, class: "form-check-input" %>
-                <%= f.label :remember_me, class: "form-check-label" %>
-              </div>
-            <% end %>
-
-            <div class="d-grid gap-2 mb-4">
-              <%= f.submit "Log In", class: "btn btn-primary btn-lg" %>
-            </div>
-          <% end %>
-
-          <div class="text-center mt-3">
-            <%= render "devise/shared/links" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary-color: #4f46e5;
+      --text-color: #333333;
+      --text-light: #666666;
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --border-color: #e5e7eb;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .login-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .card-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: var(--primary-color);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+    
+    h2 {
+      color: var(--text-color);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--text-light);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      margin-bottom: l8px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-color);
+      font-size: 15px;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    
+    .form-check {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .form-check-input {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .form-check-label {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary:hover {
+      background-color: #4338ca;
+    }
+    
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 24px;
+      gap: 6px;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+    
+    .security-badge i {
+      color: #10b981;
+    }
+    
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 24px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="card-header">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h2>Admin Portal</h2>
+        <p class="subtitle">Sign in to your dashboard</p>
+      </div>
+      
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "login-form" }) do |f| %>
+        <div class="form-group">
+          <%= f.label :email, "Email Address", class: "form-label" %>
+          <div class="input-group">
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "your@email.com" %>
+            <span class="input-icon"><i class="fas fa-envelope"></i></span>
           </div>
         </div>
+
+        <div class="form-group">
+          <%= f.label :password, "Password", class: "form-label" %>
+          <div class="input-group">
+            <%= f.password_field :password, autocomplete: "current-password", class: "form-control", placeholder: "Enter password" %>
+            <span class="input-icon"><i class="fas fa-lock"></i></span>
+          </div>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="form-check">
+            <%= f.check_box :remember_me, class: "form-check-input" %>
+            <%= f.label :remember_me, "Remember me", class: "form-check-label" %>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.submit "Log in", class: "btn-primary" %>
+        </div>
+      <% end %>
+      
+      <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Secure connection</span>
       </div>
     </div>
   </div>
-</div>
+</body>
+</html>

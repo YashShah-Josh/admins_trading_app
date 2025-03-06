@@ -16,16 +16,16 @@ Devise.setup do |config|
   require 'devise/orm/active_record'
 
   # Configure case-insensitive keys. These keys will be downcased upon creating a new user.
-  config.case_insensitive_keys = [:email]
+  config.case_insensitive_keys = [ :email ]
 
   # Configure whitespace stripping for authentication keys.
-  config.strip_whitespace_keys = [:email]
+  config.strip_whitespace_keys = [ :email ]
 
   # Skip session storage for http authentication to make API stateless.
-  config.skip_session_storage = [:http_auth]
+  config.skip_session_storage = [ :http_auth ]
 
   # If true, authentication will be done through request HTTP auth.
-  config.http_authenticatable = [:database]
+  config.http_authenticatable = [ :database ]
 
   # Configure the navigational formats Devise will respond to.
   config.navigational_formats = []

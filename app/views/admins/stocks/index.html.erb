@@ -1,32 +1,52 @@
 <h1>Stock Management</h1>
 <a href="<%= new_admins_stock_path %>" class="btn btn-primary mb-3">Add New Stock</a>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Symbol</th>
-      <th>Company</th>
-      <th>Price</th>
-      <th>Change</th>
-      <th>Quantity</th>
-      <th>Active</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stocks.each do |stock| %>
-      <tr>
-        <td><%= stock.symbol %></td>
-        <td><%= stock.company_name %></td>
-        <td><%= stock.current_price %></td>
-        <td><%= stock.price_change %></td>
-        <td><%= stock.quantity %></td>
-        <td><%= stock.is_active ? "Yes" : "No" %></td>
-        <td>
-          <a href="<%= edit_admins_stock_path(stock) %>" class="btn btn-sm btn-warning">Edit</a>
-          <%= link_to "Delete", admins_stock_path(stock), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Company</th>
+            <th>Price</th>
+            <th>Change</th>
+            <th>Quantity</th>
+            <th>Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stocks.each do |stock| %>
+            <tr>
+              <td><%= stock.symbol %></td>
+              <td><%= stock.company_name %></td>
+              <td><%= stock.current_price %></td>
+              <td>
+                <% if stock.price_change.to_f > 0 %>
+                  <span class="badge bg-success">+<%= stock.price_change %>%</span>
+                <% elsif stock.price_change.to_f < 0 %>
+                  <span class="badge bg-danger"><%= stock.price_change %>%</span>
+                <% else %>
+                  <span class="badge bg-secondary"><%= stock.price_change %>%</span>
+                <% end %>
+              </td>
+              <td><%= stock.quantity %></td>
+              <td>
+                <% if stock.is_active %>
+                  <span class="badge bg-success">Yes</span>
+                <% else %>
+                  <span class="badge bg-secondary">No</span>
+                <% end %>
+              </td>
+              <td>
+                <a href="<%= edit_admins_stock_path(stock) %>" class="btn btn-sm btn-warning">Edit</a>
+                <%= link_to "Delete", admins_stock_path(stock), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

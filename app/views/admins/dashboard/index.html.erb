@@ -1,122 +1,205 @@
-<h1 class="mb-4">Admin Dashboard</h1>
+<h1 class="dashboard-title mb-4">Admin Dashboard</h1>
 
-<div class="row">
+<div class="row g-4">
   <div class="col-md-3">
-    <div class="card bg-primary text-white shadow">
+    <div class="card bg-primary text-white shadow stats-card">
       <div class="card-body">
-        <h5>Total Users</h5>
-        <p class="display-6"><%= @total_users %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Users</h5>
+            <p class="display-6 mb-0"><%= @total_users %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-people-fill opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-3">
-    <div class="card bg-success text-white shadow">
+    <div class="card bg-success text-white shadow stats-card">
       <div class="card-body">
-        <h5>Total Orders</h5>
-        <p class="display-6"><%= @total_orders %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Orders</h5>
+            <p class="display-6 mb-0"><%= @total_orders %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-cart-fill opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-3">
-    <div class="card bg-warning text-white shadow">
+    <div class="card bg-warning text-white shadow stats-card">
       <div class="card-body">
-        <h5>Total Transactions</h5>
-        <p class="display-6"><%= @total_transactions %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Transactions</h5>
+            <p class="display-6 mb-0"><%= @total_transactions %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-currency-exchange opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-3">
-    <div class="card bg-danger text-white shadow">
+    <div class="card bg-danger text-white shadow stats-card">
       <div class="card-body">
-        <h5>Total Stocks</h5>
-        <p class="display-6"><%= @total_stocks %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Stocks</h5>
+            <p class="display-6 mb-0"><%= @total_stocks %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-graph-up opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Revenue, Brokerage, and Taxes -->
-<div class="row mt-4">
+<div class="row g-4 mt-4">
   <div class="col-md-4">
-    <div class="card bg-success text-white shadow">
+    <div class="card bg-success text-white shadow stats-card">
       <div class="card-body">
-        <h5 class="card-title">Total Revenue</h5>
-        <p class="display-6">₹<%= @total_revenue %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Revenue</h5>
+            <p class="display-6 mb-0">₹<%= number_with_precision(@total_revenue, precision: 2) %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-cash-stack opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-4">
-    <div class="card bg-info text-white shadow">
+    <div class="card bg-info text-white shadow stats-card">
       <div class="card-body">
-        <h5 class="card-title">Total Profit</h5>
-        <p class="display-6">₹<%= @total_brokerage %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Profit</h5>
+            <p class="display-6 mb-0">₹<%= number_with_precision(@total_brokerage, precision: 2) %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-wallet2 opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="col-md-4">
-    <div class="card bg-danger text-white shadow">
+    <div class="card bg-danger text-white shadow stats-card">
       <div class="card-body">
-        <h5 class="card-title">Total Taxes</h5>
-        <p class="display-6">₹<%= @total_taxes %></p>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5 class="card-title">Total Taxes</h5>
+            <p class="display-6 mb-0">₹<%= number_with_precision(@total_taxes, precision: 2) %></p>
+          </div>
+          <div class="align-self-center">
+            <i class="bi bi-receipt opacity-50 fs-1"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Recent Orders -->
-<h3 class="mt-5">Recent Orders</h3>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Stock</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th>Status</th>
-      <th>Created At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @latest_orders.each do |order| %>
-      <tr>
-        <td><%= order.id %></td>
-        <td><%= order.stock_id %></td>
-        <td><%= order.price %></td>
-        <td><%= order.quantity %></td>
-        <td><%= order.status %></td>
-        <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h3 class="section-title mt-5 mb-4">Recent Orders</h3>
+<div class="card shadow-sm mb-5">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @latest_orders.each do |order| %>
+            <tr>
+              <td><strong>#<%= order.id %></strong></td>
+              <td><%= order.stock_id %></td>
+              <td>₹<%= order.price %></td>
+              <td><%= order.quantity %></td>
+              <td>
+                <% status_class = case order.status
+                     when "completed" then "bg-success"
+                     when "pending" then "bg-warning"
+                     when "cancelled" then "bg-danger"
+                     else "bg-secondary"
+                     end %>
+                <span class="status-badge <%= status_class %> text-white"><%= order.status %></span>
+              </td>
+              <td><%= order.created_at.strftime("%d-%m-%Y %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <!-- Recent Transactions -->
-<h3 class="mt-5">Recent Transactions</h3>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Order ID</th>
-      <th>Amount</th>
-      <th>Transaction Type</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @latest_transactions.each do |txn| %>
-      <tr>
-        <td><%= txn.id %></td>
-        <td><%= txn.order_id %></td>
-        <td><%= txn.amount %></td>
-        <td><%= txn.transaction_type %></td>
-        <td><%= txn.transaction_date.strftime("%d-%m-%Y %H:%M") %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+<h3 class="section-title mt-5 mb-4">Recent Transactions</h3>
+<div class="card shadow-sm mb-5">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Order ID</th>
+            <th>Amount</th>
+            <th>Transaction Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @latest_transactions.present? %>
+            <% @latest_transactions.each do |txn| %>
+              <tr>
+                <td><strong>#<%= txn.id %></strong></td>
+                <td><%= txn.order_id %></td>
+                <td>₹<%= "%.2f" % txn.amount %></td>
+                <td>
+                  <% type_class = case txn.transaction_type
+                       when "buy" then "bg-success"
+                       when "sell" then "bg-danger"
+                       else "bg-secondary"
+                       end %>
+                  <span class="status-badge <%= type_class %> text-white">
+                    <%= txn.transaction_type.capitalize %>
+                  </span>
+                </td>
+                <td><%= txn.transaction_date.strftime("%d-%m-%Y %H:%M") %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="5" class="text-center text-muted">No recent transactions</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

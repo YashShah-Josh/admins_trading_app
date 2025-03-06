@@ -1,5 +1,6 @@
 module Admins
   class StocksController < ApplicationController
+    layout "admin"
     before_action :authenticate_admin!
     before_action :set_stock, only: [:edit, :update, :destroy]
 

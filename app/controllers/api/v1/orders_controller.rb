@@ -15,7 +15,7 @@ class Api::V1::OrdersController < ApplicationController
 
     total_amount = stock_price * quantity
     brokerage = total_amount * 0.02  # 2% Brokerage
-    taxes = total_amount * 0.18      # 18% Taxes
+    taxes = brokerage * 0.18      # 18% Taxes
     final_amount = total_amount + brokerage + taxes
 
     if user.balance < final_amount
@@ -68,7 +68,7 @@ class Api::V1::OrdersController < ApplicationController
         brokerage: brokerage,
         taxes: taxes,
         total_amount: final_amount,
-        transaction_date: Time.current,
+        transaction_date: Time.current
       )
     end
     render json: { message: "Stock purchased successfully", order: order }, status: :ok
@@ -89,7 +89,7 @@ class Api::V1::OrdersController < ApplicationController
     stock_price = stock.current_price
     total_amount = stock_price * quantity
     brokerage = total_amount * 0.02  # 2% Brokerage
-    taxes = total_amount * 0.18      # 18% Taxes
+    taxes = brokerage * 0.18      # 18% Taxes
     final_amount = total_amount - brokerage - taxes
 
     order = nil
@@ -120,7 +120,7 @@ class Api::V1::OrdersController < ApplicationController
         brokerage: brokerage,
         taxes: taxes,
         total_amount: final_amount,
-        transaction_date: Time.current,
+        transaction_date: Time.current
       )
     end
 

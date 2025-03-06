@@ -1,5 +1,6 @@
 module Admins
   class TransactionsController < ApplicationController
+    layout "admin"
     before_action :authenticate_admin!
     before_action :set_transaction, only: [:show, :destroy]
 

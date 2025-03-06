@@ -1,38 +1,48 @@
 <h1>Transactions</h1>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>User</th>
-      <th>Stock</th>
-      <th>Type</th>
-      <th>Amount</th>
-      <th>Brokerage</th>
-      <th>Taxes</th>
-      <th>Total</th>
-      <th>Date</th>
-      <th>Balance</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @transactions.each do |transaction| %>
-      <tr>
-        <td><%= transaction.id %></td>
-        <td><%= transaction.user.name %></td>
-        <td><%= transaction.order.stock.company_name %></td>
-        <td><%= transaction.transaction_type %></td>
-        <td>₹<%= transaction.amount %></td>
-        <td>₹<%= transaction.brokerage %></td>
-        <td>₹<%= transaction.taxes %></td>
-        <td>₹<%= (transaction.amount + transaction.brokerage + transaction.taxes) %></td>
-        <td><%= transaction.transaction_date.strftime("%d %b %Y") %></td>
-        <td><%= "%.2f" % transaction.user.balance %></td>
-        <td>
-          <a href="<%= admins_transaction_path(transaction) %>" class="btn btn-sm btn-primary">View</a>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>UID</th>
+            <th>User</th>
+            <th>Stock</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Brokerage</th>
+            <th>Taxes</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transactions.each do |transaction| %>
+            <tr>
+              <td><%= transaction.id %></td>
+              <td><%= transaction.user.id %></td>
+              <td><%= transaction.user.name %></td>
+              <td><%= transaction.order.stock.company_name %></td>
+              <td>
+                <% if transaction.transaction_type == 'buy' %>
+                  <span class="badge bg-success">Buy</span>
+                <% elsif transaction.transaction_type == 'sell' %>
+                  <span class="badge bg-danger">Sell</span>
+                <% end %>
+              </td>
+              <td>₹<%= transaction.amount.round(2) %></td>
+              <td>₹<%= "%.2f" % transaction.brokerage %></td>
+              <td>₹<%= transaction.taxes.round(2) %></td>
+              <td>₹<%= "%.2f" % (transaction.amount + transaction.brokerage + transaction.taxes) %></td>
+              <td><%= transaction.transaction_date.strftime("%d %b %Y") %></td>
+              <td>₹<%= transaction.balance_at_transaction&.round(2) %></td>
+              </tr>
+          <% end %>
+        </tbody>last
+      </table>
+    </div>
+  </div>
+</div>

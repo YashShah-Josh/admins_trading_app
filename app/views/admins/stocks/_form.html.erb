@@ -1,4 +1,4 @@
-<%= form_with model: @stock, url: request.path, local: true, class: "form" do |f| %>
+<%= form_with model: @stock, url: @stock.persisted? ? admins_stock_path(@stock) : admins_stocks_path, method: @stock.persisted? ? :patch : :post, local: true, class: "form" do |f| %>
   <div class="mb-3">
     <%= f.label :symbol %>
     <%= f.text_field :symbol, class: "form-control", required: true %>

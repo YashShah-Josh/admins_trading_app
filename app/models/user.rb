@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
 
-  validates :password,presence:true, length: {minimum:6}, format: { with: /\A(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+\z/, message: "must include at least one uppercase letter, one digit, and one special character" }
+  validates :password, presence: true, length: { minimum: 6 }, format: { with: /\A(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+\z/, message: "must include at least one uppercase letter, one digit, and one special character" }, if: -> { new_record? || password.present? }
+
 
 end

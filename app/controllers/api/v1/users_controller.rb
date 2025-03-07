@@ -29,7 +29,7 @@ class Api::V1::UsersController < ActionController::API
 
   # Strong parameters
   def user_params
-    params.require(:user).permit(:name, :email, :password, :phone, :address, :pan, :password_confirmation).merge(balance: 10000)
+    params.require(:user).permit(:name, :email, :password, :phone, :address, :pan, :password_confirmation).merge(balance: 100000)
   end
 
   # Generate JWT token

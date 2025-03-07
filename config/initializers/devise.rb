@@ -36,7 +36,15 @@ Devise.setup do |config|
 
   # The minimum password length for users.
   config.password_length = 6..128
-
+  Devise.setup do |config|
+    # Other Devise configurations...
+  
+    # JWT Authentication
+    config.jwt do |jwt|
+      jwt.secret = Rails.application.credentials.devise_jwt_secret || ENV['DEVISE_JWT_SECRET_KEY']
+    end
+  end
+  
   # Timeout the user session after a certain period of inactivity.
   config.timeout_in = 30.minutes
 

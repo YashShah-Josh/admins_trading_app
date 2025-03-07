@@ -70,3 +70,16 @@ gem "rack-cors", "~> 2.0"
 gem "devise-jwt", "~> 0.12.1"
 
 gem "jwt"
+
+# Gemfile
+
+group :development, :test do
+  gem 'rspec-rails'  # Main RSpec gem for Rails
+  gem 'factory_bot_rails' # For setting up test data easily
+  gem 'faker' # For generating random test data
+end
+
+group :test do
+  gem 'database_cleaner-active_record' # To clean test database
+  gem 'shoulda-matchers' # Provides additional RSpec matchers
+end

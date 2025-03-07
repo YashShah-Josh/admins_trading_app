@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
-  belongs_to :user
-  belongs_to :stock
+  belongs_to :user, required: true
+  belongs_to :stock, required: true
 
   enum status: { pending: "pending", completed: "completed", canceled: "canceled" }
 
@@ -15,6 +15,7 @@ class Order < ApplicationRecord
   private
 
   def set_price
+    return unless stock # Ensure stock is present
     self.price ||= stock.current_price * quantity
   end
 end

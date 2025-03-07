@@ -1,6 +1,6 @@
 class Transaction < ApplicationRecord
-  belongs_to :order
-  belongs_to :user
+  belongs_to :order, required: true
+  belongs_to :user, required: true
 
   enum transaction_type: { buy: "buy", sell: "sell" }
 
@@ -12,7 +12,7 @@ class Transaction < ApplicationRecord
   validates :balance_at_transaction, presence: true
 
   before_validation :calculate_brokerage_and_taxes
-  before_validation :set_balance_at_transaction
+  before_validation :set_balance_at_transaction, if: -> { user.present? }
 
   def set_balance_at_transaction
     self.balance_at_transaction = user.balance

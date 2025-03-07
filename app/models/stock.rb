@@ -5,11 +5,13 @@ class Stock < ApplicationRecord
 
   validates :symbol, presence: true, uniqueness: true, length: { minimum: 1, maximum: 10 }
   validates :company_name, presence: true, length: { minimum: 2, maximum: 100 }
-  validates :current_price, numericality: { greater_than_or_equal_to: 0 }
+  validates :current_price, numericality: { greater_than_or_equal_to: 0, message: "must be a valid number" }, allow_nil: true
   validates :price_change, numericality: true
   validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  before_validation :set_current_price
+  before_validation :set_current_price, if: -> { current_price.nil? }
+
+  private
 
   def set_current_price
     latest_price = prices.order(recorded_at: :desc).first

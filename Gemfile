@@ -56,4 +56,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "rubocop", "1.71.0", require: false
+gem "rubocop", "1.74.0", require: false
